@@ -1,0 +1,1 @@
+window.location = '../html/main.html';
