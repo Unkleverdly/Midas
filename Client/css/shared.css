@@ -46,19 +46,3 @@ html {
     --secondary: #7b5d8b;
     --accent: #84f0c8;
 }
-
-/* :root[data-theme="light"] {
-    --text: #000000;
-    --background: #ffffff;
-    --primary: #d8992c;
-    --secondary: #d8c7e1;
-    --accent: #0f7b53;
-}
-
-:root[data-theme="dark"] {
-    --text: #ffffff;
-    --background: #000000;
-    --primary: #d39427;
-    --secondary: #2f1e38;
-    --accent: #84f0c8;
-} */

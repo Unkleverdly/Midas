@@ -48,12 +48,9 @@ export class ApiRequest {
                 }
 
                 const json = await resp.json();
+                const result = json.result ?? {};
 
-                console.log(json);
-                console.log(json.result);
-                console.log(json.status);
-
-                onResult(json.status, json.result);
+                onResult(json.status, result);
             }).catch(reason => {
                 if (onError !== undefined) { onError(reason); }
             });
@@ -69,8 +66,8 @@ export class ServerRequest { constructor() { } }
 export const GET = 'GET';
 export const POST = 'POST';
 
-// const defaultEndpoint = '5.35.100.72'; const port = '8080'; const protocol = 'http';
-const defaultEndpoint = '192.168.0.14'; const port = '8080'; const protocol = 'http';
+const defaultEndpoint = '5.35.100.72'; const port = '8080'; const protocol = 'http';
+// const defaultEndpoint = '192.168.0.14'; const port = '8080'; const protocol = 'http';
 
 const requestEndpoint = `${protocol}://${defaultEndpoint}:${port}`;
 

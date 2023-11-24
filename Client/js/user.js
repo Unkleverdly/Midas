@@ -1,4 +1,4 @@
-import { USER_NOT_FOUND } from './server/requestsUtil.js';
+import { OK, USER_NOT_FOUND } from './server/requestsUtil.js';
 import { NewCategoryRequset, UserDataRequest, addCategory, getCategories, getMainData } from './server/toServer.js';
 
 const newCategoryNameInput = document.getElementById('newCategoryName');
@@ -10,8 +10,8 @@ getMainData.send(new UserDataRequest(), (status, result) => {
         return;
     }
 
-    document.getElementById('name').textContent = 'the sigma'; //result.name;
-    document.getElementById('monthSpendings').textContent = '69 69 69'; //result.monthSpendings;
+    document.getElementById('name').textContent = result.name;
+    document.getElementById('monthSpendings').textContent = 'nothing :)'; //result.monthSpendings;
 });
 
 function reloadCategories() {
@@ -42,7 +42,6 @@ function newCategory() {
         alert('unknown error; i dont know what exactly went wrong');
     });
 
-    alert('added');
 }
 
 newCategoryNameInput.value = '';
