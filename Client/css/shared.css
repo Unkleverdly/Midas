@@ -11,12 +11,20 @@ html {
     color: var(--text);
 }
 
+.bg {
+    background-color: var(--background);
+}
+
 .primary-bg {
     background-color: var(--primary);
 }
 
 .secondary-bg {
     background-color: var(--secondary);
+}
+
+.accent-bg {
+    background-color: var(--text);
 }
 
 .primary-text {
@@ -27,15 +35,19 @@ html {
     color: var(--secondary);
 }
 
+.accent-text {
+    color: var(--accent);
+}
+
 :root {
-    --text: #ffffff;
-    --background: #000000;
+    --text: #eeeeee;
+    --background: #161616;
     --primary: #d39427;
-    --secondary: #2f1e38;
+    --secondary: #7b5d8b;
     --accent: #84f0c8;
 }
 
-:root[data-theme="light"] {
+/* :root[data-theme="light"] {
     --text: #000000;
     --background: #ffffff;
     --primary: #d8992c;
@@ -49,4 +61,4 @@ html {
     --primary: #d39427;
     --secondary: #2f1e38;
     --accent: #84f0c8;
-}
+} */

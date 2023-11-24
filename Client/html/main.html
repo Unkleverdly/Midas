@@ -2,6 +2,8 @@
 <html>
 
 <head>
+    <script type="module" src="../js/main.js"></script>
+
     <title>Midas</title>
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 
@@ -12,16 +14,96 @@
     <script src="../uikit/uikit-3.17.10/js/uikit.min.js"></script>
     <script src="../uikit/uikit-3.17.10/js/uikit-icons.min.js"></script>
 
-    <script type="module" src="../js/main.js"></script>
     <link rel="stylesheet" href="../css/main.css" />
 </head>
 
 <body>
-    <h1 class="uk-heading-large uk-text-center text header primary-text"><b>Midas</b></h1>
-    <div class="uk-position-top-right">
-        <div class="uk-button-group button-group">
-            <button id="signIn" class="account-button uk-button-large primary-bg text">Sign in</button>
-            <button id="signUp" class="account-button uk-button-large primary-bg text">Sign up</button>
+    <h1 class="uk-heading-large uk-text-center text header primary-text">
+        <b>Midas</b>
+    </h1>
+
+    <div class="uk-margin-xlarge-top main-center">
+        <div class="uk-text-center main-text text">
+            Track your expenses with Midas now
+        </div>
+        <div class="uk-button-group uk-position-relative uk-position-bottom-center button-group">
+            <button uk-toggle="target: #signUpForm" class="account-button primary-bg">
+                <div class="uk-padding-small text">Sign up</div>
+            </button>
+
+            <button uk-toggle="target: #signInForm" class="account-button primary-bg">
+                <div class="uk-padding-small text">Sign in</div>
+            </button>
+        </div>
+    </div>
+
+    <div uk-modal id="signUpForm">
+        <div class="uk-modal-dialog form">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header bg">
+                <h2 class="uk-modal-title text">Sign Up</h2>
+            </div>
+
+            <div class="uk-modal-body">
+                <div>
+                    <div class="text">Full Name</div>
+                    <input id="nameInput" class="uk-input input-box text">
+                </div>
+
+                <div>
+                    <div class="text">Login</div>
+                    <input id="loginInput" class="uk-input input-box text">
+                </div>
+
+                <div>
+                    <div class="text">Password</div>
+                    <input id="passwordInput" class="uk-input input-box text" type="password">
+                </div>
+
+                <div>
+                    <div class="text">Password Again</div>
+                    <input id="passwordAgainInput" class="uk-input input-box text" type="password">
+                </div>
+            </div>
+
+            <div class="uk-button-group uk-position-relative uk-position-bottom-center button-group">
+                <button class="uk-button uk-button-default uk-modal-close round-button secondary-bg" type="button">
+                    Cancel
+                </button>
+                <button id="signUpSend" class="uk-button uk-button-default round-button primary-bg" type="button">
+                    Sign Up
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div uk-modal id="signInForm">
+        <div class="uk-modal-dialog form">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header bg">
+                <h2 class="uk-modal-title text">Sign In</h2>
+            </div>
+
+            <div class="uk-modal-body">
+                <div>
+                    <div class="text">Login</div>
+                    <input id="signInLoginInput" class="uk-input input-box text">
+                </div>
+
+                <div>
+                    <div class="text">Password</div>
+                    <input id="signInPasswordInput" class="uk-input input-box text" type="password">
+                </div>
+            </div>
+
+            <div class="uk-button-group uk-position-relative uk-position-bottom-center button-group">
+                <button class="uk-button uk-button-default uk-modal-close round-button secondary-bg" type="button">
+                    Cancel
+                </button>
+                <button id="signInSend" class="uk-button uk-button-default round-button primary-bg" type="button">
+                    Sign In
+                </button>
+            </div>
         </div>
     </div>
 </body>

@@ -1,7 +1,18 @@
-@import "colorsFonts.css";
+@import "shared.css";
 
 .header {
     text-transform: uppercase;
+}
+
+.main-text {
+    text-align: center;
+    font-size: 400%;
+}
+
+.buttons-center {
+    width: 100%;
+    margin-left: 100%;
+    margin-right: 100%;
 }
 
 .account-button {
@@ -16,7 +27,26 @@
     text-transform: uppercase;
     font-weight: 600;
 
+    font-size: xx-large;
+
     transition-duration: 0.1s;
+}
+
+.input-box {
+    background-color: #101010;
+    border-color: transparent;
+    border-radius: 4px;
+    border-width: 2px;
+    border-style: unset;
+    margin: 4px;
+}
+
+.round-button {
+    border-color: transparent;
+    border-radius: 4px;
+    border-width: 2px;
+    border-style: unset;
+    margin: 4px;
 }
 
 .account-button:hover {
@@ -27,6 +57,15 @@
 .account-button:active {
     background-color: var(--primary);
     transition-duration: 0.1s;
+}
+
+.form {
+    background-color: var(--background);
+
+    border-color: transparent;
+    border-radius: 10px;
+    border-width: 4px;
+    border-style: unset;
 }
 
 .button-group {

@@ -1,9 +1,12 @@
-import { GET, POST, RequestPath, ApiRequest, ServerResponse, ServerRequest } from './requestsUtil.js';
+import { GET, POST, RequestPath, ApiRequest, ServerResponseData, ServerRequest } from './requestsUtil.js';
+import { getUserId, getUserToken, hasUserData } from '../local.js';
 
-export class UserData extends ServerResponse {
+export class UserDataRequest extends ServerRequest {
     constructor() {
         super();
-        this.id = '';
+        this.id = getUserId();
+        this.token = getUserToken();
+        this.request = {};
     }
 }
 
@@ -16,8 +19,28 @@ export class SignUpRequest extends ServerRequest {
     }
 }
 
-const authPath = new RequestPath('auth');
+export class SignInRequest extends ServerRequest {
+    constructor(login, password) {
+        super();
+        this.login = login;
+        this.password = password;
+    }
+}
 
-export const signIn = new ApiRequest(authPath.add('sign_in'), POST, UserData);
-export const signUp = new ApiRequest(authPath.add('sign_up'), POST, UserData);
-export const check = new ApiRequest(authPath.add('check'), GET, UserData);
+export class NewCategoryRequset extends UserDataRequest {
+    constructor(name, limit) {
+        super();
+        this.request.name = name;
+        this.request.limit = Number(limit);
+    }
+}
+
+const authPath = new RequestPath('auth');
+const userPath = new RequestPath('user');
+
+export const signIn = new ApiRequest(authPath.add('signIn'), POST);
+export const signUp = new ApiRequest(authPath.add('signUp'), POST);
+
+export const getMainData = new ApiRequest(userPath.add('getMainData'), POST);
+export const getCategories = new ApiRequest(userPath.add('getCategories'), POST);
+export const addCategory = new ApiRequest(userPath.add('addCategory'), POST);

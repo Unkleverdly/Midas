@@ -2,6 +2,8 @@
 <html>
 
 <head>
+    <script type="module" src="../js/user.js"></script>
+
     <title>Midas</title>
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 
@@ -11,13 +13,95 @@
     <link rel="stylesheet" href="../uikit/uikit-3.17.10/css/uikit.min.css" />
     <script src="../uikit/uikit-3.17.10/js/uikit.min.js"></script>
     <script src="../uikit/uikit-3.17.10/js/uikit-icons.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <script type="module" src="../js/main.js"></script>
-    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/user.css" />
 </head>
 
 <body>
+    <div>
+        <div>
+            <div class="account-name">
+                <div class="text account-name" id="name">Name</div>
+            </div>
+        </div>
 
+        <div class="uk-grid center">
+            <div class="uk-width-auto no-padding side-column">
+                <div class="uk-card uk-card-default uk-card-small uk-card-body card primary-bg">
+                    <div class="uk-card-title">
+                        <div class="text">Total month spendings:</div>
+                    </div>
+                    <h2 class="uk-text-right bg-text" id="monthlySpendings">$69420</h2>
+                    <!-- <canvas id="monthSpendingChart"></canvas> -->
+                </div>
+
+                <div class="uk-card uk-card-body uk-card-default uk-card-small primary-bg card">
+                    <div class="uk-card-title">
+                        <div class="text">Categories</div>
+                    </div>
+                    <button uk-toggle="target: #addNewCategoryForm" class="uk-card-badge button bg">
+                        <div class="text">Add New</div>
+                    </button>
+                    <ul uk-accordion id="categories">
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="uk-width-expand no-padding">
+                <div class="uk-card uk-card-body uk-card-default uk-card-small primary-bg card">
+                    <div class="uk-card-title">
+                        <div class="text">Transactions</div>
+                    </div>
+                    <ul uk-accordion>
+                        <div class="uk-text-large text">not working yet :D</div>
+                    </ul>
+                </div>
+            </div>
+            <!-- 
+            <div class="uk-width-auto no-padding side-column">
+                <div class="uk-card uk-card-body uk-card-default uk-card-small primary-bg card">
+                    <div class="uk-card-title">
+                        <div class="text">Savings</div>
+                    </div>
+                    <ul uk-accordion>
+                    </ul>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+    <div uk-modal id="addNewCategoryForm">
+        <div class="uk-modal-dialog form">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header bg">
+                <h2 class="uk-modal-title text">Add New Category</h2>
+            </div>
+
+            <div class="uk-modal-body">
+                <div>
+                    <div class="text">Name</div>
+                    <input id="newCategoryName" class="uk-input input-box text">
+                </div>
+
+                <div>
+                    <div class="text">Limit</div>
+                    <input id="newCategoryLimit" class="uk-input input-box text">
+                </div>
+            </div>
+
+            <div class="uk-button-group uk-position-relative uk-position-bottom-center button-group">
+                <button class="uk-button uk-button-default uk-modal-close round-button secondary-bg" type="button">
+                    Cancel
+                </button>
+                <button id="addNewCategorySend" class="uk-button uk-button-default round-button primary-bg"
+                    type="button">
+                    Add
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
