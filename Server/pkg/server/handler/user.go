@@ -2,66 +2,129 @@ package handler
 
 import (
 	"log"
+	"midas"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-type Request struct {
-	UserId      int
-	Name        string
-	DayLimit    int
-	AmountLimit int
-}
+func (h *Handler) addCategory(c *gin.Context) {
+	var req midas.CategoryRequest
 
-func (h *Handler) NewCategory(c *gin.Context) {
-	var req Request
 	if err := c.BindJSON(&req); err != nil {
-		log.Print(err)
+		log.Printf("JSON error: %v", err)
+		c.Status(http.StatusBadRequest)
+		return
 	}
-	log.Print(req)
+
+	if h.service.CheckUser(int(req.UserData.Id), req.UserData.Token) == false {
+		log.Print("Wrong Token")
+		c.JSON(http.StatusOK, midas.ApiAnswer{Status: 1})
+		return
+	}
+
+	id, err := h.service.User.AddCategory(&req)
+	if err != nil {
+		log.Print("AddCategory error: ", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]int{"status": 0, "result": id})
 }
 
 func (h *Handler) getCategories(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")
-	c.Header("Access-Control-Allow-Headers", "*")
-	defer func() {
-		if err := recover(); err != nil {
-			log.Print(err)
-			c.Status(http.StatusBadRequest)
-		}
-	}()
-	type shortCategory struct {
-		Name   string `json:"name"`
-		Amount int    `json:"amount"`
-		Limit  int    `json:"limit"`
+	var newReq midas.UserData
+
+	if err := c.BindJSON(&newReq); err != nil {
+		log.Printf("JSON error: %v", err)
+		c.Status(http.StatusBadRequest)
+		return
 	}
 
-	// var req struct {
-	// 	Id int `json:"id"`
-	// }
-	idCookie, err := c.Cookie("userId")
+	if h.service.CheckUser(int(newReq.Id), newReq.Token) == false {
+		log.Print("Wrong Token")
+		c.JSON(http.StatusOK, midas.ApiAnswer{Status: 1})
+		return
+	}
+
+	answ := h.service.User.GetCategories(&newReq)
+	c.JSON(http.StatusOK, midas.ApiAnswer{Status: 0, Result: &answ})
+}
+
+func (h *Handler) makeTransaction(c *gin.Context) {
+	var newReq midas.CategoryRequest
+
+	if err := c.BindJSON(&newReq); err != nil {
+		log.Print("JSON error: ", err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	log.Printf("Make transaction for %v id", newReq.UserData.Id)
+
+	if h.service.CheckUser(int(newReq.UserData.Id), newReq.UserData.Token) == false {
+		log.Print("Wrong Token")
+		c.JSON(http.StatusOK, midas.ApiAnswer{Status: 1})
+		return
+	}
+
+	err := h.service.MakeTransaction(&newReq)
 	if err != nil {
-		log.Fatal(err)
+		log.Print("Transaction error: ", err)
+		return
 	}
-	log.Printf("Cookie userId: %v", idCookie)
-	id, _ := strconv.Atoi(idCookie)
-	// if err := c.BindJSON(&req); err != nil {
-	// 	log.Print(err)
-	// 	c.Status(http.StatusBadRequest)
-	// 	return
-	// }
-	answ := h.service.User.GetCategories(id)
-	var response map[int]shortCategory = make(map[int]shortCategory)
+	c.JSON(http.StatusOK, midas.ApiAnswer{Status: 0})
+}
 
-	for _, val := range answ {
-		response[val.Id] = shortCategory{
-			Name:   val.Name,
-			Amount: val.Amount,
-			Limit:  val.AmountLimit,
-		}
+func (h *Handler) getMainData(c *gin.Context) {
+	var newReq struct {
+		midas.UserData `json:"user"`
+		Time           struct {
+			TimeStart int `json:"timeStart"`
+			TimeEnd   int `json:"timeEnd"`
+		} `json:"request"`
 	}
 
-	c.JSON(http.StatusOK, response)
+	if err := c.BindJSON(&newReq); err != nil {
+		log.Printf("JSON error: %v", err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	log.Printf("Get Main Data for %v id", newReq.Id)
+
+	if h.service.CheckUser(int(newReq.UserData.Id), newReq.UserData.Token) == false {
+		log.Print("Wrong Token")
+		c.AbortWithStatusJSON(http.StatusOK, midas.ApiAnswer{Status: 1})
+		return
+	}
+	answ := h.service.GetMainData(newReq.UserData.Id, newReq.Time.TimeStart, newReq.Time.TimeEnd)
+
+	c.JSON(http.StatusOK, midas.ApiAnswer{Status: 0, Result: *answ})
+}
+
+func (h *Handler) deleteCategory(c *gin.Context) {
+	var newReq midas.CategoryRequest
+
+	if err := c.BindJSON(&newReq); err != nil {
+		log.Printf("JSON error: %v", err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	log.Printf("Delete category(userId:%v, categoryId:%v)", newReq.UserData.Id, newReq.Category.Id)
+
+	if h.service.CheckUser(int(newReq.UserData.Id), newReq.UserData.Token) == false {
+		log.Print("Wrong Token")
+		c.AbortWithStatusJSON(http.StatusOK, midas.ApiAnswer{Status: 1})
+		return
+	}
+
+	err := h.service.DeleteCategory(newReq.UserData, newReq.Category)
+
+	if err != nil {
+		log.Print("Delete category: ", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, midas.ApiAnswer{Status: 0})
 }

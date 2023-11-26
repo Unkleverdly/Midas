@@ -6,12 +6,17 @@ import (
 )
 
 type Authorization interface {
-	CreateUser(midas.User) (int64, error)
+	CreateUser(*midas.User) (int64, error)
+	SignIn(login string) (int, string)
 }
 
 type User interface {
-	NewCategory(int, midas.Category) error
-	GetCategories(int) []midas.Category
+	GetCategories(id int64) []midas.Category
+	AddCategory(categoryRequest *midas.CategoryRequest) (int, error)
+	GetUser(id int64) (midas.User, error)
+	MakeTransaction(userId int64, categoryId, amount int) error
+	CalculationOfExpenses(timeStart, timeEnd int) int
+	DeleteCategory(userId int64, categoryId, amount int) error
 }
 
 type Storage struct {

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"log"
 	"midas"
 	"net/http"
@@ -10,28 +9,66 @@ import (
 )
 
 func (h *Handler) signUp(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")
-	c.Header("Access-Control-Allow-Headers", "*")
-
 	var newUser midas.User
 
+	defer func() {
+		if err := recover(); err != nil {
+			c.JSON(http.StatusOK, midas.ApiAnswer{Status: 3})
+			log.Print("Error: ", err)
+
+		}
+	}()
+
 	if err := c.BindJSON(&newUser); err != nil {
-		log.Fatal(err)
+		log.Printf("JSON errror: %v", err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
 	}
 
-	id, err := h.service.Authorization.CreateUser(newUser)
+	id, err := h.service.Authorization.CreateUser(&newUser)
+
 	if err != nil {
-		log.Fatalf("Handler Error: %v", err)
+		log.Printf("Handler Error: %v", err)
+		c.AbortWithStatusJSON(http.StatusOK, midas.ApiAnswer{Status: 3})
+		return
 	}
+	newUser, _ = h.service.GetUser(id)
 
 	log.Printf("New User: {id: %v, name: %v, login: %v}", id, newUser.Name, newUser.Login)
-
-	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("userId", fmt.Sprint(id), 3600*24*30, "/", "", false, true)
-
-	c.Status(http.StatusOK)
+	c.JSON(http.StatusOK, midas.ApiAnswer{
+		Status: 0,
+		Result: &midas.UserData{
+			Id:    newUser.Id,
+			Token: newUser.Token,
+		},
+	})
 }
 
 func (h *Handler) signIn(c *gin.Context) {
-	c.Status(http.StatusBadRequest)
+	var User struct {
+		Login    string `json:"login"`
+		Password string `json:"password"`
+	}
+
+	if err := c.BindJSON(&User); err != nil {
+		log.Print("JSON errror: ", err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	id, err := h.service.SignIn(User.Login, User.Password)
+	if err != nil {
+		log.Print("Wrong Password")
+		c.AbortWithStatusJSON(http.StatusOK, midas.ApiAnswer{Status: 2})
+		return
+	}
+	newUser, _ := h.service.GetUser(int64(id))
+
+	c.JSON(http.StatusOK, midas.ApiAnswer{
+		Status: 0,
+		Result: &midas.UserData{
+			Id:    newUser.Id,
+			Token: newUser.Token,
+		},
+	})
 }
