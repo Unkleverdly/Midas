@@ -67,3 +67,30 @@
 .side-column {
     width: fit-content;
 }
+
+.category-dropdown {
+    border-radius: 4px;
+    border-width: 2px;
+    border-style: unset;
+    background-color: var(--background);
+}
+
+.category-dropdown-inner {
+    margin: 0;
+}
+
+.category-button {
+    transition-duration: 0.1s;
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--text);
+    font-size: large;
+}
+
+.category-button:hover {
+    transition-duration: 0.1s;
+    background-color: var(--secondary);
+    border-color: transparent;
+    color: var(--text);
+    font-size: large;
+}

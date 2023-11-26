@@ -10,9 +10,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="../uikit/uikit-3.17.10/css/uikit.min.css" />
-    <script src="../uikit/uikit-3.17.10/js/uikit.min.js"></script>
-    <script src="../uikit/uikit-3.17.10/js/uikit-icons.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit-icons.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="../css/user.css" />
@@ -32,7 +33,7 @@
                     <div class="uk-card-title">
                         <div class="text">Total month spendings:</div>
                     </div>
-                    <h2 class="uk-text-right bg-text" id="monthlySpendings">$69420</h2>
+                    <h2 class="uk-text-right bg-text" id="monthSpendings"></h2>
                     <!-- <canvas id="monthSpendingChart"></canvas> -->
                 </div>
 
@@ -50,6 +51,24 @@
             </div>
 
             <div class="uk-width-expand no-padding">
+                <div class="uk-card uk-card-body uk-card-default uk-card-small primary-bg card">
+                    <div class="uk-card-title">
+                        <div class="text">Add Transaction</div>
+                    </div>
+                    <div>
+                        <div class="text">Category</div>
+                        <div class="uk-inline">
+                            <button class="uk-button uk-button-default" type="button">Undefined</button>
+                            <div uk-dropdown="mode: click; pos: bottom-center" class="category-dropdown">
+                                <ul class="uk-nav uk-dropdown-nav category-dropdown-inner">
+                                    <li><button id="chooseCategory0" class="category-button">Undefined</button></li>
+                                    <li><button id="chooseCategory1" class="category-button">Undefined 1</button></li>
+                                    <li><button id="chooseCategory2" class="category-button">Undefined 2</button></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="uk-card uk-card-body uk-card-default uk-card-small primary-bg card">
                     <div class="uk-card-title">
                         <div class="text">Transactions</div>
@@ -102,6 +121,7 @@
             </div>
         </div>
     </div>
+
 </body>
 
 </html>

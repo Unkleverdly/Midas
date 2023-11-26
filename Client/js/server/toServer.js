@@ -1,15 +1,6 @@
 import { GET, POST, RequestPath, ApiRequest, ServerResponseData, ServerRequest } from './requestsUtil.js';
 import { getUserId, getUserToken, hasUserData } from '../local.js';
 
-export class UserDataRequest extends ServerRequest {
-    constructor() {
-        super();
-        this.id = getUserId();
-        this.token = getUserToken();
-        this.request = {};
-    }
-}
-
 export class SignUpRequest extends ServerRequest {
     constructor(name, login, password) {
         super();
@@ -24,6 +15,29 @@ export class SignInRequest extends ServerRequest {
         super();
         this.login = login;
         this.password = password;
+    }
+}
+
+export class UserDataRequest extends ServerRequest {
+    constructor() {
+        super();
+        this.user =
+        {
+            id: getUserId(),
+            token: getUserToken()
+        };
+        this.request = {};
+    }
+}
+
+export class MainDataRequest extends UserDataRequest {
+    constructor(timeStart, timeEnd) {
+        super();
+        this.request =
+        {
+            timeStart: timeStart,
+            timeEnd: timeEnd
+        }
     }
 }
 
@@ -43,4 +57,4 @@ export const signUp = new ApiRequest(authPath.add('signUp'), POST);
 
 export const getMainData = new ApiRequest(userPath.add('getMainData'), POST);
 export const getCategories = new ApiRequest(userPath.add('getCategories'), POST);
-export const addCategory = new ApiRequest(userPath.add('addCategory'), POST);
+export const addNewCategory = new ApiRequest(userPath.add('addCategory'), POST);

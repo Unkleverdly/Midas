@@ -1,4 +1,4 @@
-import { hasUserData } from "./local";
+import { hasUserData } from "./local.js";
 
-const page = hasUserData ? 'user' : 'main';
+const page = hasUserData() ? 'user' : 'main';
 window.location = `../html/${page}.html`;
