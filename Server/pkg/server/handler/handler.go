@@ -2,6 +2,7 @@ package handler
 
 import (
 	"midas/pkg/service"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,18 +13,21 @@ type Handler struct {
 
 func (h *Handler) Init() *gin.Engine {
 	router := gin.New()
-	router.Use()
+	router.Use(h.AddHeaders)
+
 	auth := router.Group("auth/")
 	auth.POST("/signIn", h.signIn)
 	auth.POST("/signUp", h.signUp)
-	auth.OPTIONS("/signUp", AddHeaders)
-	auth.OPTIONS("/signIn", AddHeaders)
 
 	user := router.Group("user/")
-	user.POST("/newCategory", h.NewCategory)
-	user.GET("/getCategories", h.getCategories)
-	user.OPTIONS("/newCategory", AddHeaders)
-	user.OPTIONS("/getCategories", AddHeaders)
+	// user.GET("/getUser", h.getUser)
+	user.POST("/getMainData", h.getMainData)
+
+	user.POST("/addCategory", h.addCategory)
+	user.POST("/deleteCategory", h.deleteCategory)
+	user.POST("/getCategories", h.getCategories)
+
+	user.POST("/makeTransaction", h.makeTransaction)
 
 	return router
 }
@@ -32,13 +36,14 @@ func NewHandler(s *service.Service) *Handler {
 	return &Handler{service: s}
 }
 
-// func AddHeaders(c *gin.Context) {
-// 	c.Header("Access-Control-Allow-Origin", "*")
-// 	c.Header("Access-Control-Allow-Headers", "*")
-// }
-
-func MiddleWare(c *gin.Context) {
+func (h *Handler) AddHeaders(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
 	c.Header("Access-Control-Allow-Headers", "*")
+
+	if c.Request.Method == "OPTIONS" {
+		c.Status(http.StatusOK)
+		return
+	}
+
 	c.Next()
 }

@@ -6,12 +6,18 @@ import (
 )
 
 type Authorization interface {
-	CreateUser(midas.User) (int64, error)
+	CreateUser(user *midas.User) (int64, error)
+	SignIn(login, password string) (int, error)
 }
 
 type User interface {
-	NewCategory(int, midas.Category) error
-	GetCategories(int) []midas.Category
+	GetCategories(user *midas.UserData) []midas.Category
+	AddCategory(categoryRequest *midas.CategoryRequest) (int, error)
+	MakeTransaction(categoryRequest *midas.CategoryRequest) error
+	GetUser(id int64) (midas.User, error)
+	CheckUser(id int, token string) bool
+	GetMainData(id int64, timeStart, timeEnd int) *midas.MainData
+	DeleteCategory(user *midas.UserData, category *midas.Category) error
 }
 
 type Service struct {

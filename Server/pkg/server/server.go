@@ -8,7 +8,7 @@ type Server struct {
 
 func (s *Server) Run(port string, handler http.Handler) error {
 	s.httpServer = &http.Server{
-		Addr:    "192.168.0.14:" + port,
+		Addr:    ":" + port,
 		Handler: handler,
 	}
 	return s.httpServer.ListenAndServe()
