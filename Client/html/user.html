@@ -21,9 +21,15 @@
 
 <body>
     <div>
-        <div>
+        <div class="text">
             <div class="account-name">
                 <div class="text account-name" id="name"></div>
+            </div>
+            <div class="account-name">
+                <div class="text secondary-text account-name">Если возникают ошибки, нужно очистить кеш</div>
+            </div>
+            <div class="account-name log-out">
+                <div class="text account-name" id="logoutButton"><u><a class="text">Log out</a></u></div>
             </div>
         </div>
 
@@ -57,9 +63,7 @@
                         <div class="text">Add Transaction</div>
                     </div>
                     <div class="uk-grid uk-flex-bottom">
-                        <div>
-                        </div>
-                        <div>
+                        <div class="">
                             <div class="text" id="newTransactionText">Category</div>
                             <div class="uk-inline">
                                 <button class="uk-button uk-button-default category-dropdown-button" type="button"
@@ -73,13 +77,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div class="no-padding">
                             <div class="text">Amount</div>
                             <div class="uk-inline">
                                 <input type="text" id="newTransactionAmount" class="input-box large-text">
                             </div>
                         </div>
-                        <div>
+                        <div class="no-padding">
                             <button class="bg round-button large-text uk-margin-large"
                                 id="newTransactionSend">Add</button>
                         </div>
@@ -134,6 +138,10 @@
                 <button id="addNewSavingSend" class="uk-button uk-button-default round-button primary-bg" type="button">
                     Add
                 </button>
+                <button id="addNewSavingDelete" class="uk-button uk-button-default round-button primary-bg"
+                    type="button">
+                    Delete
+                </button>
             </div>
         </div>
     </div>
@@ -164,6 +172,10 @@
                 <button id="addNewCategorySend" class="uk-button uk-button-default round-button primary-bg"
                     type="button">
                     Add
+                </button>
+                <button id="addNewCategoryDelete" class="uk-button uk-button-default round-button primary-bg"
+                    type="button">
+                    Delete
                 </button>
             </div>
         </div>

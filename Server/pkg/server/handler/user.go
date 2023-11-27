@@ -90,7 +90,7 @@ func (h *Handler) getMainData(c *gin.Context) {
 		return
 	}
 
-	log.Printf("Get Main Data for %v id", newReq.Id)
+	log.Printf("Get Main Data for %v id", newReq.UserData.Id)
 
 	if h.service.CheckUser(int(newReq.UserData.Id), newReq.UserData.Token) == false {
 		log.Print("Wrong Token")

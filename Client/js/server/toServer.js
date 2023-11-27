@@ -65,6 +65,17 @@ export class TransactionRequset extends UserDataRequest {
     }
 }
 
+export class DeleteCategoryRequset extends UserDataRequest {
+    constructor(categoryId, amount) {
+        super();
+        this.request =
+        {
+            id: categoryId,
+            amount: amount
+        };
+    }
+}
+
 const authPath = new RequestPath('auth');
 const userPath = new RequestPath('user');
 
@@ -74,5 +85,6 @@ export const signUp = new ApiRequest(authPath.add('signUp'), POST);
 export const getMainData = new ApiRequest(userPath.add('getMainData'), POST);
 export const getCategories = new ApiRequest(userPath.add('getCategories'), POST);
 export const addNewCategory = new ApiRequest(userPath.add('addCategory'), POST);
+export const deleteCategory = new ApiRequest(userPath.add('deleteCategory'), POST);
 export const makeTransaction = new ApiRequest(userPath.add('makeTransaction'), POST);
 

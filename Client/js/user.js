@@ -1,8 +1,9 @@
-import { hasUserData } from './local.js';
+import { deleteUserData, hasUserData } from './local.js';
 import { OK, USER_NOT_FOUND } from './server/requestsUtil.js';
 import {
+    DeleteCategoryRequset,
     MainDataRequest, NewCategoryRequset, TransactionRequset,
-    addNewCategory, getMainData, makeTransaction
+    addNewCategory, deleteCategory, getCategories, getMainData, makeTransaction
 } from './server/toServer.js';
 
 if (!hasUserData()) {
@@ -26,12 +27,11 @@ let allTransactions = [];
 
 let chosenTransactionCategory = null;
 let useCategoryForNewTransaction = true;
-let editedCategory = null;
-let editedSaving = null;
+let editedCatSaving = null;
 
 function addCategory(cat) {
     const id = cat.id;
-    const name = cat.name;
+    const name = cat.name.replace('_', ' ');
     const isCategory = cat.limit >= 0;
 
     const list = isCategory ? categoriesList : savingsList;
@@ -43,19 +43,39 @@ function addCategory(cat) {
         amountText += ` out of ${Math.abs(cat.limit)}`;
     }
 
+    const formId = isCategory ? 'addNewCategoryForm' : 'addNewSavingForm';
+
     list.insertAdjacentHTML('beforeend',
         `
     <li>
         <div class="uk-accordion-title text">
             <div>${name}</div>
-            <button class="uk-badge button bg" id="editCat${id}">Edit</button>
+            <button uk-toggle="target: #${formId}" class="uk-badge button bg" id="editCat${id}">Edit</button>
         </div>
         <div class="uk-accordion-content">
             <div class="text">${amountText}</div>
         </div>
     </li>`);
 
-    // document.getElementById(`editCat${id}`).e;
+    const editButtonId = `editCat${id}`;
+    const editButton = document.getElementById(editButtonId);
+    editButton.addEventListener('click', () => {
+        editButton.addEventListener('click', () => {
+            UIkit.toggle(editButton).toggle();
+        });
+        if (isCategory) {
+            editedCatSaving = cat;
+            document.getElementById('addCategoryTitle').textContent = 'Edit Category';
+            newCategoryLimitInput.value = cat.limit;
+            newCategoryNameInput.value = cat.name;
+        }
+        else {
+            editedCatSaving = cat;
+            document.getElementById('addSavingTitle').textContent = 'Edit Saving';
+            newSavingGoalInput.value = cat.limit;
+            newSavingNameInput.value = cat.name;
+        }
+    });
 
     if (isCategory != useCategoryForNewTransaction) return;
     const dropdown = newTransactionCategoryDropdown;
@@ -71,11 +91,7 @@ function addCategory(cat) {
     });
 }
 
-function removeCategory(id) {
-    const ind = allCategories.findIndex(e => e.id == id)
-    allCategories.splice(ind, 1);
-    initCategories();
-}
+function getIndex(categoryId) { return allCategories.findIndex(e => e.id == categoryId); }
 
 function initCategories() {
     categoriesList.innerHTML = '';
@@ -83,6 +99,7 @@ function initCategories() {
     newTransactionCategoryDropdown.innerHTML = '';
     for (let i = 0; i < allCategories.length; i++) {
         const cat = allCategories[i];
+        cat.name = cat.name.replace('_', ' ');
         categoriesMap.set(cat.id, cat);
         addCategory(cat);
     }
@@ -109,7 +126,7 @@ function addTransaction(t) {
     transactionList.insertAdjacentHTML('beforeend',
         `
     <li class="no-bg">
-        <div class="text">${cat.limit >= 0 ? 'Spent on' : 'Saved up for'} ${cat.name}: ${cat.amount} (${strDate})</div>
+        <div class="text">${cat.limit >= 0 ? 'Spent on' : 'Saved up for'} ${cat.name}: ${t.amount} (${strDate})</div>
     </li>`);
 }
 
@@ -166,9 +183,42 @@ function makeNewTransaction() {
                 amount: amount
             };
 
+            categoriesMap.get(category.id).amount += amount;
+
             allTransactions.push(t);
             initTransactions();
         }
+    });
+}
+
+function newCategoryOrSaving(name, limit, onFinish) {
+    let id = -1;
+    if (editedCatSaving != null) {
+        id = editedCatSaving.id;
+    }
+
+    addNewCategory.send(new NewCategoryRequset(name.replace(' ', '_'), limit, id), (status, result) => {
+        if (status == OK) {
+            const cat = {
+                id: result,
+                name: name,
+                limit: limit,
+                amount: 0
+            };
+            if (id != -1) {
+                cat.amount = editedCatSaving.amount;
+                const ind = getIndex(id);
+                allCategories.splice(ind, 1);
+                allCategories.splice(ind, 0, cat);
+                initCategories();
+                return;
+            }
+            addCategory(cat);
+
+            onFinish();
+            return;
+        }
+        alert('unknown error; i dont know what exactly went wrong');
     });
 }
 
@@ -186,25 +236,7 @@ function newCategory() {
         return;
     }
 
-    let id = -1;
-    if (editedCategory != null) {
-        id = editedCategory.id;
-    }
-
-    addNewCategory.send(new NewCategoryRequset(name, limit, id), (status, result) => {
-        if (status == OK) {
-            if (id != -1) removeCategory(id);
-            const cat = {
-                id: result,
-                name: name,
-                limit: limit,
-                amount: 0
-            };
-            addCategory(cat);
-            return;
-        }
-        alert('unknown error; i dont know what exactly went wrong');
-    });
+    newCategoryOrSaving(name, limit, () => UIkit.toggle(document.getElementById('newCategory')).toggle());
 }
 
 function newSaving() {
@@ -221,25 +253,8 @@ function newSaving() {
         return;
     }
 
-    let id = -1;
-    if (editedSaving != null) {
-        id = editedSaving.id;
-    }
-
-    addNewCategory.send(new NewCategoryRequset(name, -limit, id), (status, result) => {
-        if (status == OK) {
-            if (id != -1) removeCategory(id);
-            const cat = {
-                id: result,
-                name: name,
-                limit: -limit,
-                amount: 0
-            };
-            addCategory(cat);
-            return;
-        }
-        alert('unknown error; i dont know what exactly went wrong');
-    });
+    newCategoryOrSaving(name, -limit, () =>
+        UIkit.toggle(document.getElementById('newSaving')).toggle());
 }
 
 newCategoryNameInput.value = '';
@@ -248,13 +263,10 @@ newTransactionAmountInput.value = '';
 
 loadMainData();
 
-const cat = {
-    id: 123,
-    name: 'test',
-    limit: -456,
-    amount: 45
-};
-addCategory(cat);
+document.getElementById('logoutButton').addEventListener('click', () => {
+    deleteUserData();
+    window.location = '../html/main.html';
+});
 
 document.getElementById('addNewCategorySend').addEventListener('click', newCategory);
 document.getElementById('addNewSavingSend').addEventListener('click', newSaving);
@@ -266,6 +278,31 @@ document.getElementById('newTransactionSwitch').addEventListener('click', () => 
     document.getElementById('newTransactionText').textContent = useCategoryForNewTransaction
         ? 'Category' : 'Saving';
     initCategories();
+});
+
+document.getElementById('addNewCategoryDelete').addEventListener('click', () => {
+    if (editedCatSaving == null) {
+        return;
+    }
+
+    const id = editedCatSaving.id;
+    console.log(id);
+    if (id == -1) { return; }
+
+    const cat = categoriesMap.get(id);
+
+    deleteCategory.send(new DeleteCategoryRequset(id, cat.amount), (status, result) => {
+        if (status == OK) {
+            const ind = getIndex(id);
+
+            categoriesMap.get(0).amount += cat.amount;
+
+            allCategories.splice(ind, 1);
+            initCategories();
+            return;
+        }
+        alert('unknown error; i dont know what exactly went wrong');
+    });
 });
 
 // document.getElementById('testSend').addEventListener('click', test);

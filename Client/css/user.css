@@ -120,3 +120,9 @@
     color: var(--text);
     background-color: var(--background);
 }
+
+.log-out {
+    display: inline-block;
+    margin-top: 0px;
+    margin-right: 0px;
+}

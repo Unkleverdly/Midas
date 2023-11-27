@@ -28,6 +28,7 @@ func (h *Handler) Init() *gin.Engine {
 	user.POST("/getCategories", h.getCategories)
 
 	user.POST("/makeTransaction", h.makeTransaction)
+	// user.POST("/getTranscation", h.)
 
 	return router
 }

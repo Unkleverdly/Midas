@@ -53,6 +53,7 @@ export class ApiRequest {
 
                 onResult(json.status, result);
             }).catch(reason => {
+                console.error(`request/callback error: ${reason}`);
                 if (onError !== undefined) { onError(reason); }
             });
     }

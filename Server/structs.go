@@ -14,10 +14,18 @@ type User struct {
 	Categories []Category `json:"categories"`
 }
 
+type Transaction struct {
+	Id         int `json:"id"`
+	CategoryId int `json:"categoryId"`
+	Amount     int `json:"amount"`
+	Time       int `json:"time"`
+}
+
 type MainData struct {
-	Name           string     `json:"name"`
-	MonthSpendings int        `json:"monthSpendings"`
-	Categories     []Category `json:"categories"`
+	Name           string        `json:"name"`
+	MonthSpendings int           `json:"monthSpendings"`
+	Categories     []Category    `json:"categories"`
+	Transactions   []Transaction `json:"transactions"`
 }
 
 type UserData struct {

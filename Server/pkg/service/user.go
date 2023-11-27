@@ -1,6 +1,7 @@
 package service
 
 import (
+	"log"
 	"midas"
 	"midas/internal/storage"
 )
@@ -29,10 +30,16 @@ func (u *UserService) GetUser(id int64) (midas.User, error) {
 
 func (u *UserService) GetMainData(id int64, timeStart, timeEnd int) *midas.MainData {
 	user, _ := u.GetUser(id)
+	defer func() {
+		if err := recover(); err != nil {
+			log.Print("Pososambus: ", err)
+		}
+	}()
 	return &midas.MainData{
 		Name:           user.Name,
-		Categories:     user.Categories,
-		MonthSpendings: u.stor.CalculationOfExpenses(timeStart, timeEnd),
+		Categories:     u.stor.GetCategories(id, timeStart, timeEnd),
+		MonthSpendings: u.stor.CalculationOfExpenses(timeStart, timeEnd, id),
+		Transactions:   u.stor.GetTransactions(user.Id, timeStart, timeEnd),
 	}
 }
 
