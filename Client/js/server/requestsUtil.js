@@ -67,8 +67,8 @@ export class ServerRequest { constructor() { } }
 export const GET = 'GET';
 export const POST = 'POST';
 
-// const defaultEndpoint = '5.35.100.72'; const port = '8080'; const protocol = 'http';
-const defaultEndpoint = '192.168.0.14'; const port = '8080'; const protocol = 'http';
+const defaultEndpoint = '5.35.100.72'; const port = '8080'; const protocol = 'http';
+// const defaultEndpoint = '192.168.0.14'; const port = '8080'; const protocol = 'http';
 
 const requestEndpoint = `${protocol}://${defaultEndpoint}:${port}`;
 
@@ -78,4 +78,3 @@ export const USER_NOT_FOUND = 1;
 export const WRONG_PASSWORD = 2;
 export const USER_ALREADY_EXISTS = 3;
 // export const  = 0;
-

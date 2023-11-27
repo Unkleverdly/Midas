@@ -97,7 +97,9 @@ func (u *UserDB) MakeTransaction(userId int64, categoryId, amount int) error {
 	var catg []midas.Category = u.GetCategories(userId)
 	for i, val := range catg {
 		if val.Id == categoryId {
+			log.Print("amount now: ", catg[i].Amount)
 			catg[i].Amount += amount
+			log.Print("amount after: ", catg[i].Amount)
 			break
 		}
 	}

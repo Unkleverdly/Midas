@@ -37,15 +37,31 @@ export class MainDataRequest extends UserDataRequest {
         {
             timeStart: timeStart,
             timeEnd: timeEnd
-        }
+        };
     }
 }
 
 export class NewCategoryRequset extends UserDataRequest {
-    constructor(name, limit) {
+    constructor(name, limit, id) {
         super();
-        this.request.name = name;
-        this.request.limit = Number(limit);
+        const idToUse = id ?? -1;
+        this.request =
+        {
+            name: name,
+            limit: Number(limit),
+            id: idToUse
+        };
+    }
+}
+
+export class TransactionRequset extends UserDataRequest {
+    constructor(category, amount) {
+        super();
+        this.request =
+        {
+            id: category,
+            amount: amount
+        };
     }
 }
 
@@ -58,3 +74,5 @@ export const signUp = new ApiRequest(authPath.add('signUp'), POST);
 export const getMainData = new ApiRequest(userPath.add('getMainData'), POST);
 export const getCategories = new ApiRequest(userPath.add('getCategories'), POST);
 export const addNewCategory = new ApiRequest(userPath.add('addCategory'), POST);
+export const makeTransaction = new ApiRequest(userPath.add('makeTransaction'), POST);
+

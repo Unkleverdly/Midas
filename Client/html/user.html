@@ -28,7 +28,7 @@
         </div>
 
         <div class="uk-grid center">
-            <div class="uk-width-auto no-padding side-column">
+            <div class="no-padding side-column">
                 <div class="uk-card uk-card-default uk-card-small uk-card-body card primary-bg">
                     <div class="uk-card-title">
                         <div class="text">Total month spendings:</div>
@@ -41,31 +41,47 @@
                     <div class="uk-card-title">
                         <div class="text">Categories</div>
                     </div>
-                    <button uk-toggle="target: #addNewCategoryForm" class="uk-card-badge button bg">
+                    <button uk-toggle="target: #addNewCategoryForm" class="uk-card-badge button bg" id="newCategory">
                         <div class="text">Add New</div>
                     </button>
-                    <ul uk-accordion id="categories">
-
-                    </ul>
+                    <ul uk-accordion id="categories"></ul>
                 </div>
             </div>
 
-            <div class="uk-width-expand no-padding">
+            <div class="no-padding">
                 <div class="uk-card uk-card-body uk-card-default uk-card-small primary-bg card">
+                    <button class="uk-card-badge bg round-button large-text uk-margin-large" id="newTransactionSwitch">
+                        Switch to savings
+                    </button>
                     <div class="uk-card-title">
                         <div class="text">Add Transaction</div>
                     </div>
-                    <div>
-                        <div class="text">Category</div>
-                        <div class="uk-inline">
-                            <button class="uk-button uk-button-default" type="button">Undefined</button>
-                            <div uk-dropdown="mode: click; pos: bottom-center" class="category-dropdown">
-                                <ul class="uk-nav uk-dropdown-nav category-dropdown-inner">
-                                    <li><button id="chooseCategory0" class="category-button">Undefined</button></li>
-                                    <li><button id="chooseCategory1" class="category-button">Undefined 1</button></li>
-                                    <li><button id="chooseCategory2" class="category-button">Undefined 2</button></li>
-                                </ul>
+                    <div class="uk-grid uk-flex-bottom">
+                        <div>
+                        </div>
+                        <div>
+                            <div class="text" id="newTransactionText">Category</div>
+                            <div class="uk-inline">
+                                <button class="uk-button uk-button-default category-dropdown-button" type="button"
+                                    id="newTransactionCategoryToggle">
+                                    ________
+                                </button>
+                                <div uk-dropdown="mode: click; pos: bottom-center" class="category-dropdown">
+                                    <ul class="uk-nav uk-dropdown-nav category-dropdown-inner"
+                                        id="newTransactionCategory">
+                                    </ul>
+                                </div>
                             </div>
+                        </div>
+                        <div>
+                            <div class="text">Amount</div>
+                            <div class="uk-inline">
+                                <input type="text" id="newTransactionAmount" class="input-box large-text">
+                            </div>
+                        </div>
+                        <div>
+                            <button class="bg round-button large-text uk-margin-large"
+                                id="newTransactionSend">Add</button>
                         </div>
                     </div>
                 </div>
@@ -73,21 +89,52 @@
                     <div class="uk-card-title">
                         <div class="text">Transactions</div>
                     </div>
-                    <ul uk-accordion>
-                        <div class="uk-text-large text">not working yet :D</div>
+                    <ul class="uk-list uk-list-divider uk-grid-collapse" id="transactions"></ul>
+                </div>
+            </div>
+
+            <div class="no-padding">
+                <div class="uk-card uk-card-body uk-card-default uk-card-small uk-width-medium primary-bg card">
+                    <div class="uk-card-title">
+                        <div class="text">Savings</div>
+                        <button uk-toggle="target: #addNewSavingForm" class="uk-card-badge button bg" id="newSavings">
+                            <div class="text">Add New</div>
+                        </button>
+                    </div>
+                    <ul uk-accordion id="savings">
                     </ul>
                 </div>
             </div>
-            <!-- 
-            <div class="uk-width-auto no-padding side-column">
-                <div class="uk-card uk-card-body uk-card-default uk-card-small primary-bg card">
-                    <div class="uk-card-title">
-                        <div class="text">Savings</div>
-                    </div>
-                    <ul uk-accordion>
-                    </ul>
+        </div>
+    </div>
+
+    <div uk-modal id="addNewSavingForm">
+        <div class="uk-modal-dialog form">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div class="uk-modal-header bg">
+                <h2 class="uk-modal-title text" id="addSavingTitle">Add New Saving</h2>
+            </div>
+
+            <div class="uk-modal-body">
+                <div>
+                    <div class="text">Name</div>
+                    <input id="newSavingName" class="uk-input input-box text">
                 </div>
-            </div> -->
+
+                <div>
+                    <div class="text">Goal</div>
+                    <input id="newSavingGoal" class="uk-input input-box text">
+                </div>
+            </div>
+
+            <div class="uk-button-group uk-position-relative uk-position-bottom-center button-group">
+                <button class="uk-button uk-button-default uk-modal-close round-button secondary-bg" type="button">
+                    Cancel
+                </button>
+                <button id="addNewSavingSend" class="uk-button uk-button-default round-button primary-bg" type="button">
+                    Add
+                </button>
+            </div>
         </div>
     </div>
 
@@ -95,7 +142,7 @@
         <div class="uk-modal-dialog form">
             <button class="uk-modal-close-default" type="button" uk-close></button>
             <div class="uk-modal-header bg">
-                <h2 class="uk-modal-title text">Add New Category</h2>
+                <h2 class="uk-modal-title text" id="addCategoryTitle">Add New Category</h2>
             </div>
 
             <div class="uk-modal-body">
